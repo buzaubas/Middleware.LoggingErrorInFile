@@ -1,23 +1,24 @@
 ﻿using static System.Net.Mime.MediaTypeNames;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace Middleware.LoggingErrorInFile
 {
     public class LoggingError
     {
-        private readonly RequestDelegate _requestDelegate;
+        private readonly RequestDelegate requestDelegate;
 
-        public LoggingError(RequestDelegate requestDelegate)
+        public LoggingError(RequestDelegate _requestDelegate)
         {
-            requestDelegate = requestDelegate ?? throw new ArgumentNullException(nameof(requestDelegate));
+            requestDelegate = _requestDelegate;
         }
 
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                throw new Exception("Mistake occured while processing");
-                await _requestDelegate.Invoke(context);
+                //throw new Exception("Mistake occured while processing");
+                await requestDelegate.Invoke(context);
             }
             catch (Exception e)
             {
